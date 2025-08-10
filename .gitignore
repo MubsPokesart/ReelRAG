@@ -205,3 +205,9 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# ReelRAG specific temporary files and directories
+temp_downloads/
+audio_files/
+chroma_db/
+session.json
