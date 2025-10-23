@@ -1,0 +1,16 @@
+flask
+flask-cors
+typer[all]
+instagrapi
+openai-whisper
+moviepy
+python-dotenv
+sentence-transformers
+chromadb
+umap-learn
+hdbscan
+scikit-learn
+numpy
+pandas
+rank_bm25
+google-generativeai
