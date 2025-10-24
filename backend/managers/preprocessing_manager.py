@@ -109,3 +109,10 @@ class PreprocessingManager:
         except Exception as e:
             logger.error(f"Failed to transcribe {audio_path}: {e}")
             return None
+        finally:
+            if audio_path and audio_path.exists():
+                try:
+                    os.remove(audio_path)
+                    logger.info(f"Removed temporary audio file: {audio_path}")
+                except OSError as e:
+                    logger.error(f"Error removing temporary file {audio_path}: {e}")
