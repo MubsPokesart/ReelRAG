@@ -1,0 +1,2 @@
+2025-10-23 14:18:41,750 INFO: ReelRAG API startup [in C:\Users\oshom\Desktop\ReelRAG-1\backend\api\app.py:38]
+2025-10-23 14:18:42,845 ERROR: Failed to initialize BM25 model: 'NoneType' object has no attribute 'info' [in C:\Users\oshom\Desktop\ReelRAG-1\backend\core\retriever.py:53]
