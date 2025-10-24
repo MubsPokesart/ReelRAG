@@ -2,6 +2,7 @@ import os
 import logging
 import numpy as np
 from typing import List, Dict, Any
+import ast
 
 import chromadb
 from sentence_transformers import SentenceTransformer
@@ -20,7 +21,7 @@ class Retriever:
     """Orchestrates hybrid search, including semantic, keyword, and query refinement."""
 
     def __init__(self, db_path: str = None, collection_name: str = "reels", logger=None):
-        self.logger = logger or logging.getLogger(__name__)
+        self.logger = logger if logger else logging.getLogger(__name__)
         self.model = SentenceTransformer('all-MiniLM-L6-v2')
         db_path = Path(db_path) if db_path else BASE_DATA_DIR / "reels_db"
         db_path.mkdir(exist_ok=True)
@@ -62,7 +63,7 @@ class Retriever:
         try:
             response = self.llm.generate_content(prompt)
             # Basic parsing, assuming the LLM returns a list-like string
-            paraphrases = eval(response.text.strip())
+            paraphrases = ast.literal_eval(response.text.strip())
             if isinstance(paraphrases, list):
                 return [query] + paraphrases
         except Exception as e:
