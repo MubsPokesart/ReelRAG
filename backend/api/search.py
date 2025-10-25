@@ -12,15 +12,22 @@ def search():
     query = data.get('query')
     k = data.get('k', 10)
     use_rocchio = data.get('use_rocchio', False)
-    # topic_filter and date_range are not implemented in the retriever yet
-    # but are received here for future use.
-    topic_filter = data.get('topic_filter')
-    date_range = data.get('date_range')
+    semantic_weight = data.get('semantic_weight', 0.7) # New
+    num_paraphrases = data.get('num_paraphrases', 3) # New
 
     try:
-        current_app.logger.info(f"Performing search with query: '{query}', k={k}, use_rocchio={use_rocchio}")
+        current_app.logger.info(
+            f"Search: query='{query}', k={k}, use_rocchio={use_rocchio}, "
+            f"semantic_weight={semantic_weight}, num_paraphrases={num_paraphrases}"
+        )
         retriever = current_app.retriever
-        results = retriever.search(query, k=k, use_rocchio=use_rocchio)
+        results = retriever.search(
+            query,
+            k=k,
+            use_rocchio=use_rocchio,
+            semantic_weight=semantic_weight,
+            num_paraphrases=num_paraphrases
+        )
         return jsonify(results)
     except Exception as e:
         current_app.logger.error(f"Search failed: {e}")

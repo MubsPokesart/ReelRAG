@@ -3,6 +3,7 @@ import SearchBar from '../components/SearchBar';
 import ResultCard from '../components/ResultCard';
 import ReportViewer from '../components/ReportViewer';
 import useSearchViewModel from '../viewmodels/useSearchViewModel';
+import SearchOptions from '../components/SearchOptions'; // Import the new component
 
 const HomeView = () => {
     const {
@@ -13,7 +14,16 @@ const HomeView = () => {
         loading,
         error,
         handleSearch,
-        handleGenerateReport
+        handleGenerateReport,
+        // Destructure new state and setters
+        useRocchio,
+        setUseRocchio,
+        semanticWeight,
+        setSemanticWeight,
+        numParaphrases,
+        setNumParaphrases,
+        numResults, // New
+        setNumResults, // New
     } = useSearchViewModel();
 
     return (
@@ -24,6 +34,18 @@ const HomeView = () => {
                 setQuery={setQuery} 
                 onSearch={handleSearch} 
                 onGenerateReport={handleGenerateReport}
+                loading={loading}
+            />
+
+            <SearchOptions
+                useRocchio={useRocchio}
+                setUseRocchio={setUseRocchio}
+                semanticWeight={semanticWeight}
+                setSemanticWeight={setSemanticWeight}
+                numParaphrases={numParaphrases}
+                setNumParaphrases={setNumParaphrases}
+                numResults={numResults} // New
+                setNumResults={setNumResults} // New
                 loading={loading}
             />
 

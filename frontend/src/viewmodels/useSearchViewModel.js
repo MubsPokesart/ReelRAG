@@ -8,6 +8,12 @@ const useSearchViewModel = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
+    // New state for search options
+    const [useRocchio, setUseRocchio] = useState(false);
+    const [semanticWeight, setSemanticWeight] = useState(0.7);
+    const [numParaphrases, setNumParaphrases] = useState(3);
+    const [numResults, setNumResults] = useState(5); // New
+
     const API_BASE_URL = '/api'; // Using proxy
 
     const handleSearch = async () => {
@@ -19,7 +25,14 @@ const useSearchViewModel = () => {
         setReport(null);
 
         try {
-            const response = await axios.post(`${API_BASE_URL}/search`, { query });
+            const payload = {
+                query,
+                use_rocchio: useRocchio,
+                semantic_weight: semanticWeight,
+                num_paraphrases: numParaphrases,
+                k: numResults, // New
+            };
+            const response = await axios.post(`${API_BASE_URL}/search`, payload);
             setResults(response.data);
         } catch (err) {
             setError(err.response?.data?.error || 'An error occurred during search.');
@@ -36,7 +49,12 @@ const useSearchViewModel = () => {
         setReport(null);
 
         try {
-            const response = await axios.post(`${API_BASE_URL}/report`, { query });
+            // Pass numResults as 'n' for report generation
+            const payload = {
+                query,
+                n: numResults, // New
+            };
+            const response = await axios.post(`${API_BASE_URL}/report`, payload);
             setReport(response.data);
         } catch (err) {
             setError(err.response?.data?.error || 'An error occurred while generating the report.');
@@ -52,7 +70,16 @@ const useSearchViewModel = () => {
         loading,
         error,
         handleSearch,
-        handleGenerateReport
+        handleGenerateReport,
+        // Expose new state and setters
+        useRocchio,
+        setUseRocchio,
+        semanticWeight,
+        setSemanticWeight,
+        numParaphrases,
+        setNumParaphrases,
+        numResults, // New
+        setNumResults, // New
     };
 };
 

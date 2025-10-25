@@ -56,13 +56,12 @@ class Retriever:
 
     def _paraphrase_query(self, query: str, num_paraphrases: int = 3) -> List[str]:
         """Generates paraphrases of the user query using an LLM."""
-        if not self.llm:
+        if not self.llm or num_paraphrases == 0:
             return [query]
         
         prompt = f"Generate {num_paraphrases} diverse paraphrases for the following search query, focusing on different intents and keywords. Return only a Python list of strings. Query: '{query}'"
         try:
             response = self.llm.generate_content(prompt)
-            # Basic parsing, assuming the LLM returns a list-like string
             paraphrases = ast.literal_eval(response.text.strip())
             if isinstance(paraphrases, list):
                 return [query] + paraphrases
@@ -70,12 +69,11 @@ class Retriever:
             self.logger.error(f"LLM paraphrasing failed: {e}")
         return [query] # Fallback to original query
 
-    def search(self, query: str, k: int = 10, semantic_weight: float = 0.7, use_rocchio: bool = False) -> List[Dict[str, Any]]:
+    def search(self, query: str, k: int = 10, semantic_weight: float = 0.7, use_rocchio: bool = False, num_paraphrases: int = 3) -> List[Dict[str, Any]]:
         """Performs a hybrid search and returns a ranked list of reels."""
         # 1. Generate Query Vector (with optional paraphrasing)
-        paraphrases = self._paraphrase_query(query)
+        paraphrases = self._paraphrase_query(query, num_paraphrases=num_paraphrases)
         query_embeddings = self.model.encode(paraphrases)
-        # Averaging paraphrased vectors for a more robust query
         query_vector = np.mean(query_embeddings, axis=0).tolist()
 
         # 2. Semantic Search (ChromaDB)
