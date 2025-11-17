@@ -1,4 +1,5 @@
 import os
+import re
 import logging
 import numpy as np
 from typing import List, Dict, Any
@@ -62,12 +63,22 @@ class Retriever:
         prompt = f"Generate {num_paraphrases} diverse paraphrases for the following search query, focusing on different intents and keywords. Return only a Python list of strings. Query: '{query}'"
         try:
             response = self.llm.generate_content(prompt)
-            paraphrases = ast.literal_eval(response.text.strip())
-            if isinstance(paraphrases, list):
-                return [query] + paraphrases
+            response_text = response.text.strip()
+
+            self.logger.info(f"Paraphrasing response: {response_text}")
+            
+            # Try to find a list pattern in the response
+            list_pattern = r'\[.*?\]'
+            match = re.search(list_pattern, response_text, re.DOTALL)
+            
+            if match:
+                list_str = match.group(0)
+                paraphrases = ast.literal_eval(list_str)
+                if isinstance(paraphrases, list):
+                    return [query] + [str(p) for p in paraphrases]
         except Exception as e:
             self.logger.error(f"LLM paraphrasing failed: {e}")
-        return [query] # Fallback to original query
+        return [query]
 
     def search(self, query: str, k: int = 10, semantic_weight: float = 0.7, use_rocchio: bool = False, num_paraphrases: int = 3) -> List[Dict[str, Any]]:
         """Performs a hybrid search and returns a ranked list of reels."""

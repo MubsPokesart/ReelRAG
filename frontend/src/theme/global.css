@@ -104,27 +104,56 @@ main {
 }
 
 /* --- Search Bar --- */
-.search-bar-container {
+/* Wrapper for the search box and buttons */
+.search-bar-wrapper {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    margin-bottom: 3rem;
+    width: 100%;
+    align-items: center; /* Center the box and buttons */
 }
 
+/* Container for the entire search box */
+.search-box-container {
+    background-color: #fff;
+    border-radius: 1rem; /* rounded-2xl */
+    border: 1px solid #e5e7eb;
+    padding: 0.75rem;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.07), 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%; /* Make the box take full width */
+}
+
+.search-box-container:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.search-box-container:focus-within {
+    border-color: #a5b4fc;
+    box-shadow: 0 0 0 3px rgba(165, 180, 252, 0.4);
+}
+
+/* The textarea itself */
 .search-input {
     width: 100%;
-    padding: 0.875rem 1.25rem;
+    padding: 0.5rem;
     font-size: 1rem;
-    border: 2px solid var(--card-border);
-    border-radius: var(--border-radius);
-    transition: var(--transition);
-    background-color: var(--card-bg);
+    border: none; /* Make it blend into the container */
+    outline: none;
+    background-color: transparent;
+    font-family: inherit;
+    resize: none; /* Disable manual resizing */
+    overflow-y: auto; /* Add scrollbar if content overflows */
+    line-height: 1.5;
+    min-height: 2.5rem; /* Minimum height */
+    max-height: 200px; /* Optional: constrain max height */
 }
 
 .search-input:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px var(--primary-light);
+    border-color: transparent; /* Override previous focus style */
 }
 
 .search-input:disabled {
